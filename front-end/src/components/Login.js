@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import {
   TextField,
@@ -6,6 +6,9 @@ import {
   FormControlLabel,
   Switch,
   Button,
+  Stack,
+  Snackbar,
+  Alert
 } from "@mui/material";
 
 export default function Login({
@@ -16,8 +19,39 @@ export default function Login({
   handlePassChange,
   handleSwitchChange,
   handleSubmit,
-  isAuthenticated
+  isAuthenticated,
+  isLoginError,
+  setIsLoginError,
+  isSignupError,
+  setIsSignupError,
+  isSignupSuccess,
+  setIsSignupSuccess
 }) {
+  const [open, setOpen] = useState(false);
+
+  const handleLoginClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setIsLoginError(false);
+  };
+
+  const handleSignupErrorClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setIsSignupError(false);
+  };
+
+  const handleSignupSuccessClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setIsSignupSuccess(false);
+  };
   return (
     <>
       {isAuthenticated ? (
@@ -53,6 +87,29 @@ export default function Login({
           <Button variant="contained" onClick={handleSubmit}>
             Submit
           </Button>
+          <Stack spacing={2} sx={{ width: "100%" }}>
+            <Snackbar
+              open={isLoginError}
+              autoHideDuration={2000}
+              onClose={handleLoginClose}
+            >
+              <Alert severity="error">Incorrect login credentials</Alert>
+            </Snackbar>
+            <Snackbar
+              open={isSignupError}
+              autoHideDuration={2000}
+              onClose={handleSignupErrorClose}
+            >
+              <Alert severity="error">Invalid signup: username already exists</Alert>
+            </Snackbar>
+            <Snackbar
+              open={isSignupSuccess}
+              autoHideDuration={2000}
+              onClose={handleSignupErrorClose}
+            >
+              <Alert severity="success">Success!</Alert>
+            </Snackbar>
+          </Stack>
         </>
       )}
     </>

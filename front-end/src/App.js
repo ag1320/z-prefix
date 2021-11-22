@@ -6,7 +6,7 @@ import Public from "./components/Public";
 import Create from "./components/Create";
 import { Routes, Route, NavLink } from "react-router-dom";
 import axios from "axios";
-import { Button } from '@mui/material'
+import { Button } from "@mui/material";
 
 async function getData() {
   let res = await axios.get("http://localhost:3001/");
@@ -19,6 +19,9 @@ function App() {
   let [checked, setChecked] = useState(true);
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
+  let [isLoginError, setIsLoginError] = useState(false);
+  let [isSignupError, setIsSignupError] = useState(false);
+  let [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
   const handleSwitchChange = (event) => {
     setChecked(event.target.checked);
@@ -34,12 +37,31 @@ function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    let endpoint = "";
     if (checked) {
-      //sign up
+      endpoint = "signup";
     } else {
-      //login
+      endpoint = "login";
     }
-    setIsAuthenticated(true);
+    axios
+      .post(`http://localhost:3001/${endpoint}`, {
+        username,
+        password,
+      })
+      .then(function (response) {
+        if (endpoint === "login") {
+          setIsAuthenticated(true);
+        } else {
+          setIsSignupSuccess(true);
+        }
+      })
+      .catch(function (error) {
+        if (endpoint === "login") {
+          setIsLoginError(true);
+        } else {
+          setIsSignupError(true)
+        }
+      });
     setUsername("");
     setPassword("");
   };
@@ -59,7 +81,7 @@ function App() {
   return (
     <>
       <div className="topbar">
-        <NavLink to="/Login" className = 'App-link'>
+        <NavLink to="/Login" className="App-link">
           <Button>Login</Button>
         </NavLink>
         <NavLink to="/Login">
@@ -82,6 +104,12 @@ function App() {
                   handlePassChange={handlePassChange}
                   handleSwitchChange={handleSwitchChange}
                   handleSubmit={handleSubmit}
+                  isLoginError={isLoginError}
+                  setIsLoginError={setIsLoginError}
+                  isSignupError = {isSignupError}
+                  setIsSignupError = {setIsSignupError}
+                  isSignupSuccess = {isSignupSuccess}
+                  setIsSignupSuccess = {setIsSignupSuccess}
                 />
               }
             />
