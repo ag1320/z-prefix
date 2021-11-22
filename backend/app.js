@@ -2,7 +2,11 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
-const { insertUser, getPassword } = require("./controllers/controllers");
+const {
+  insertUser,
+  getPassword,
+  getPosts,
+} = require("./controllers/controllers");
 const bcrypt = require("bcrypt");
 
 app.use(express.json());
@@ -12,8 +16,10 @@ app.use(cors());
 const saltRounds = 12;
 const { hash, compare } = bcrypt;
 
-app.get("/", (req, res) => {
-  res.json("test");
+app.get("/posts", (req, res) => {
+  getPosts()
+    .then((data) => res.status(201).json(data))
+    .catch((err) => res.status(500).json(err));
 });
 
 app.post("/signup", (req, res) => {

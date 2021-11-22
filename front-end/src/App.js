@@ -1,27 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import Login from "./components/Login";
 import RequireAuth from "./components/RequireAuth";
 import Public from "./components/Public";
 import Create from "./components/Create";
+import PostFull from './components/PostFull.js'
 import { Routes, Route, NavLink } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
 
-async function getData() {
-  let res = await axios.get("http://localhost:3001/");
-  return res;
-}
-
 function App() {
   let [isAuthenticated, setIsAuthenticated] = useState(false);
-  let [data, setData] = useState([]);
   let [checked, setChecked] = useState(true);
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
   let [isLoginError, setIsLoginError] = useState(false);
   let [isSignupError, setIsSignupError] = useState(false);
   let [isSignupSuccess, setIsSignupSuccess] = useState(false);
+  let [data, setData] = useState([]);
 
   const handleSwitchChange = (event) => {
     setChecked(event.target.checked);
@@ -59,28 +55,19 @@ function App() {
         if (endpoint === "login") {
           setIsLoginError(true);
         } else {
-          setIsSignupError(true)
+          setIsSignupError(true);
         }
       });
     setUsername("");
     setPassword("");
   };
 
-  useEffect(() => {
-    let mounted = true;
-    getData().then((items) => {
-      if (mounted) {
-        setData(items);
-      }
-    });
-    console.log(data);
-
-    return () => (mounted = false);
-  }, []);
-
   return (
     <>
       <div className="topbar">
+      <NavLink to="/" className="App-link">
+          <Button>Home</Button>
+        </NavLink>
         <NavLink to="/Login" className="App-link">
           <Button>Login</Button>
         </NavLink>
@@ -91,7 +78,8 @@ function App() {
       <div className="App">
         <header className="App-header">
           <Routes>
-            <Route path="/" element={<Public />} />
+            <Route path="/" element={<Public data = {data} setData = {setData}/>} />
+            <Route path="/:postid" element={<PostFull data = {data}/>} />
             <Route
               path="/login"
               element={
@@ -106,10 +94,10 @@ function App() {
                   handleSubmit={handleSubmit}
                   isLoginError={isLoginError}
                   setIsLoginError={setIsLoginError}
-                  isSignupError = {isSignupError}
-                  setIsSignupError = {setIsSignupError}
-                  isSignupSuccess = {isSignupSuccess}
-                  setIsSignupSuccess = {setIsSignupSuccess}
+                  isSignupError={isSignupError}
+                  setIsSignupError={setIsSignupError}
+                  isSignupSuccess={isSignupSuccess}
+                  setIsSignupSuccess={setIsSignupSuccess}
                 />
               }
             />

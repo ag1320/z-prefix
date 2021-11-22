@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import {
   TextField,
@@ -27,7 +26,6 @@ export default function Login({
   isSignupSuccess,
   setIsSignupSuccess
 }) {
-  const [open, setOpen] = useState(false);
 
   const handleLoginClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -105,7 +103,7 @@ export default function Login({
             <Snackbar
               open={isSignupSuccess}
               autoHideDuration={2000}
-              onClose={handleSignupErrorClose}
+              onClose={handleSignupSuccessClose}
             >
               <Alert severity="success">Success!</Alert>
             </Snackbar>

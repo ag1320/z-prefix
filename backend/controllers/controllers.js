@@ -13,7 +13,14 @@ function getPassword(username) {
     .then((data) => {
       return data[0].password;
     })
-    .catch((err)=> err)
+    .catch((err) => err);
 }
 
-module.exports = { insertUser, getPassword };
+function getPosts() {
+  return knex("posts")
+    .select("*")
+    .then((data) => data)
+    .catch((err) => err);
+}
+
+module.exports = { insertUser, getPassword, getPosts };
