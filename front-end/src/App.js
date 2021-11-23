@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import Login from "./components/Login";
 import RequireAuth from "./components/RequireAuth";
@@ -6,6 +6,7 @@ import Public from "./components/Public";
 import Create from "./components/Create";
 import PostFull from "./components/PostFull.js";
 import MyPosts from "./components/MyPosts.js";
+import Edit from './components/Edit.js'
 import { Routes, Route, NavLink } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -156,11 +157,15 @@ function App() {
             path="/myposts"
             element={
               <RequireAuth isAuthenticated={isAuthenticated}>
-                <MyPosts
-                  userId={userId}
-                  data={data}
-                  setData={setData}
-                />
+                <MyPosts userId={userId} data={data} setData={setData} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/edit/:postId"
+            element={
+              <RequireAuth isAuthenticated={isAuthenticated}>
+                <Edit data = {data} setData = {setData} />
               </RequireAuth>
             }
           />

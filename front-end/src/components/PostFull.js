@@ -4,6 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import history from "../history.js";
 import {
   Card,
   CardContent,
@@ -11,6 +12,9 @@ import {
   CardHeader,
   IconButton,
   Grid,
+  Modal,
+  Box,
+  Button,
 } from "@mui/material";
 
 async function getData(userId) {
@@ -20,6 +24,23 @@ async function getData(userId) {
   return res.data;
 }
 
+async function deletePost(postId) {
+  let res = await axios.delete(`http://localhost:3001/delete/${postId}`);
+  return res.data;
+}
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 export default function Post({
   data,
   userId,
@@ -27,10 +48,22 @@ export default function Post({
   setIsUsersPost,
   isAuthenticated,
 }) {
+  history.push()
   let { postId } = useParams();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleDelete = () => {
+    deletePost(postId);
+    handleClose();
+    history.back();
+  };
+
   const filterPosts = (obj) => {
     return obj.post_id == postId;
   };
+
   let post = data.filter(filterPosts)[0];
 
   function checkUser(obj) {
@@ -41,7 +74,6 @@ export default function Post({
     let mounted = true;
     getData(userId, postId).then((items) => {
       if (mounted && isAuthenticated) {
-        console.log(items);
         let filteredPosts = items.filter(checkUser);
         filteredPosts.length > 0 ? setIsUsersPost(true) : setIsUsersPost(false);
       }
@@ -49,12 +81,25 @@ export default function Post({
     return () => (mounted = false);
   }, []);
 
-  console.log(isUsersPost);
   return (
     <>
       {post ? (
         <Grid container justifyContent="center">
           <Grid item style={{ margin: 100 }}>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Are you sure you want to delete this post?
+                </Typography>
+                <Button onClick={handleDelete}>Yes</Button>
+                <Button onClick={handleClose}>No</Button>
+              </Box>
+            </Modal>
             <Card
               variant="oulined"
               style={{ maxWidth: "80vw", maxHeight: "auto" }}
@@ -62,21 +107,21 @@ export default function Post({
               <CardHeader
                 title={post.title}
                 avatar={
-                  <NavLink to="/">
-                    <IconButton>
-                      <ChevronLeftIcon />
-                    </IconButton>
-                  </NavLink>
+                  <IconButton>
+                    <ChevronLeftIcon onClick={history.back} />
+                  </IconButton>
                 }
                 action={
                   isUsersPost ? (
                     <>
-                      <IconButton>
+                      <IconButton onClick={handleOpen}>
                         <DeleteIcon />
                       </IconButton>
-                      <IconButton>
-                        <EditIcon />
-                      </IconButton>
+                      <NavLink to = {`/edit/${postId}`} >
+                        <IconButton>
+                          <EditIcon />
+                        </IconButton>
+                      </NavLink>
                     </>
                   ) : (
                     <></>

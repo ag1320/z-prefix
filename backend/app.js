@@ -8,6 +8,8 @@ const {
   getPosts,
   createPost,
   getUserPosts,
+  deletePost,
+  patchPost
 } = require("./controllers/controllers");
 const bcrypt = require("bcrypt");
 
@@ -68,6 +70,24 @@ app.post("/getUsersPosts", (req, res) => {
   let { userId } = content;
   getUserPosts(userId)
     .then((posts) => res.status(200).json(posts))
+    .catch((err) => res.status(500).json(err));
+});
+
+app.delete("/delete/:postId", (req, res) => {
+  const { postId } = req.params
+  deletePost(postId)
+    .then((data) => res.status(200).json('deleted'))
+    .catch((err) => res.status(500).json(err));
+});
+
+app.patch("/patch", (req, res) => {
+  const content = req.body
+  const { title, body, postId } = content
+  console.log(title)
+  console.log(body)
+  console.log(postId)
+  patchPost(title, body, postId)
+    .then((data) => res.status(200).json('patched'))
     .catch((err) => res.status(500).json(err));
 });
 

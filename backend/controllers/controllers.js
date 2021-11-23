@@ -40,4 +40,23 @@ function getUserPosts(userId) {
     .catch((err) => err);
 }
 
-module.exports = { insertUser, getUserInfo, getPosts, createPost, getUserPosts };
+function deletePost(postId) {
+  let post_id = postId
+   return knex("posts")
+     .del()
+     .where({ post_id })
+     .then((data) => data)
+     .catch((err) => err);
+ }
+
+ function patchPost(title, body, postId) {
+  let post_id = postId
+   return knex("posts")
+     .update({title, body})
+     .where({ post_id })
+     .then((data) => data)
+     .catch((err) => err);
+ }
+
+
+module.exports = { insertUser, getUserInfo, getPosts, createPost, getUserPosts, deletePost, patchPost };

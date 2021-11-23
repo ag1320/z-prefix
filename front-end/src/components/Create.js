@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   TextField,
   Button,
@@ -85,11 +85,11 @@ export default function Create(userId) {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <NavLink to ='/myposts'>
+                  <Link to ='/myposts'>
                     <Button variant="contained" onClick={handleSubmit}>
                       Submit
                     </Button>
-                  </NavLink>
+                  </Link>
                 </Grid>
               </Grid>
             </CardContent>
@@ -103,7 +103,7 @@ export default function Create(userId) {
           onClose={handleClose}
         >
           <Alert severity="success">
-            Submitted! check the home page to see your article!
+            Submitted! check the home page or my posts to see your article!
           </Alert>
         </Snackbar>
         <Snackbar open={isError} autoHideDuration={2000} onClose={handleClose}>

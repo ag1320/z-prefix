@@ -4,6 +4,7 @@ import Post from "../components/Post.js";
 import { Grid } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import "./Public.css";
+import history from '../history.js'
 
 async function getData() {
   let res = await axios.get("http://localhost:3001/posts");
@@ -11,6 +12,7 @@ async function getData() {
 }
 
 export default function Create({ data, setData, setIsUsersPost }) {
+  history.push('/')
   useEffect(() => {
     let mounted = true;
     getData().then((items) => {
