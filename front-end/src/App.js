@@ -1,24 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Login from "./components/Login";
 import RequireAuth from "./components/RequireAuth";
 import Public from "./components/Public";
 import Create from "./components/Create";
-import PostFull from './components/PostFull.js'
+import PostFull from "./components/PostFull.js";
 import { Routes, Route, NavLink } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
 
 function App() {
   let [isAuthenticated, setIsAuthenticated] = useState(false);
-  let [checked, setChecked] = useState(true);
+  let [checked, setChecked] = useState(false);
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
   let [isLoginError, setIsLoginError] = useState(false);
   let [isSignupError, setIsSignupError] = useState(false);
   let [isSignupSuccess, setIsSignupSuccess] = useState(false);
   let [data, setData] = useState([]);
-  let [userId, setUserId] = useState(0);
+  let [userId, setUserId] = useState(100000000000000000000000);
+  let [isUsersPost, setIsUsersPost] = useState(false);
+  let [zeroEntry, setZeroEntry] = useState(false);
 
   const handleSwitchChange = (event) => {
     setChecked(event.target.checked);
@@ -34,6 +36,10 @@ function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (password.length === 0 || username.length === 0){
+      setZeroEntry(true)
+      return
+    }
     let endpoint = "";
     if (checked) {
       endpoint = "signup";
@@ -48,7 +54,7 @@ function App() {
       .then(function (response) {
         if (endpoint === "login") {
           setIsAuthenticated(true);
-          setUserId(response.data.user_id)
+          setUserId(response.data.user_id);
         } else {
           setIsSignupSuccess(true);
         }
@@ -67,21 +73,40 @@ function App() {
   return (
     <>
       <div className="topbar">
-      <NavLink to="/" className="App-link">
+        <NavLink to="/" className="App-link">
           <Button>Home</Button>
         </NavLink>
-        <NavLink to="/Login" className="App-link">
+        <NavLink to="/login" className="App-link">
           <Button>Login</Button>
         </NavLink>
-        <NavLink to="/Login">
+        <NavLink to="/create" className="App-link">
           <Button>Create</Button>
         </NavLink>
       </div>
       <div className="App">
-        <header className="App-header">
           <Routes>
-            <Route path="/" element={<Public data = {data} setData = {setData}/>} />
-            <Route path="/:postid" element={<PostFull data = {data}/>} />
+            <Route
+              path="/"
+              element={
+                <Public
+                  data={data}
+                  setData={setData}
+                  setIsUsersPost={setIsUsersPost}
+                />
+              }
+            />
+            <Route
+              path="/:postId"
+              element={
+                <PostFull
+                  data={data}
+                  userId={userId}
+                  isUsersPost={isUsersPost}
+                  setIsUsersPost={setIsUsersPost}
+                  isAuthenticated={isAuthenticated}
+                />
+              }
+            />
             <Route
               path="/login"
               element={
@@ -100,6 +125,8 @@ function App() {
                   setIsSignupError={setIsSignupError}
                   isSignupSuccess={isSignupSuccess}
                   setIsSignupSuccess={setIsSignupSuccess}
+                  zeroEntry = {zeroEntry}
+                  setZeroEntry = {setZeroEntry}
                 />
               }
             />
@@ -107,12 +134,11 @@ function App() {
               path="/create"
               element={
                 <RequireAuth isAuthenticated={isAuthenticated}>
-                  <Create userId = {userId}/>
+                  <Create userId={userId} />
                 </RequireAuth>
               }
             />
           </Routes>
-        </header>
       </div>
     </>
   );

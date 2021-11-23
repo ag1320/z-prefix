@@ -28,6 +28,8 @@ export default function Login({
   setIsSignupError,
   isSignupSuccess,
   setIsSignupSuccess,
+  setZeroEntry,
+  zeroEntry
 }) {
   const handleLoginClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -52,58 +54,73 @@ export default function Login({
 
     setIsSignupSuccess(false);
   };
+  const handleZeroEntryClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setZeroEntry(false);
+  };
   return (
     <>
       {isAuthenticated ? (
-        <Navigate to="/create" />
+        <Navigate to="/myposts" />
       ) : (
         <>
-          <Card variant="outlined">
-            <CardContent>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={checked}
-                          onChange={handleSwitchChange}
+          <Grid container justifyContent="center">
+            <Grid item style={{ margin: 100 }}>
+              <Card variant="outlined">
+                <CardContent>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12} >
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={checked}
+                              onChange={handleSwitchChange}
+                            />
+                          }
+                          label="Sign up"
                         />
-                      }
-                      label="Sign up"
-                    />
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="outlined-basic"
-                    label="Username"
-                    variant="outlined"
-                    autoComplete="current-password"
-                    onChange={handleUserChange}
-                    value={username}
-                    placeholder="Username"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="outlined-password-input"
-                    label="Password"
-                    type="password"
-                    autoComplete="current-password"
-                    onChange={handlePassChange}
-                    value={password}
-                    placeholder="Password"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button variant="contained" onClick={handleSubmit}>
-                    Submit
-                  </Button>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+                      </FormGroup>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="outlined-basic"
+                        label="Username"
+                        variant="outlined"
+                        autoComplete="current-password"
+                        onChange={handleUserChange}
+                        value={username}
+                        placeholder="Username"
+                        fullWidth
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="outlined-password-input"
+                        label="Password"
+                        type="password"
+                        autoComplete="current-password"
+                        onChange={handlePassChange}
+                        value={password}
+                        placeholder="Password"
+                        fullWidth
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" onClick={handleSubmit}>
+                        Submit
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
           <Stack spacing={2} sx={{ width: "100%" }}>
             <Snackbar
               open={isLoginError}
@@ -127,6 +144,13 @@ export default function Login({
               onClose={handleSignupSuccessClose}
             >
               <Alert severity="success">Success!</Alert>
+            </Snackbar>
+            <Snackbar
+              open={zeroEntry}
+              autoHideDuration={2000}
+              onClose={handleZeroEntryClose}
+            >
+              <Alert severity="error">password and username are required</Alert>
             </Snackbar>
           </Stack>
         </>

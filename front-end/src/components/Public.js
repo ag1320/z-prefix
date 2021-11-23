@@ -3,14 +3,14 @@ import axios from "axios";
 import Post from "../components/Post.js";
 import { Grid } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import "./Public.css";
 
 async function getData() {
   let res = await axios.get("http://localhost:3001/posts");
   return res.data;
 }
 
-export default function Create({data, setData}) {
-
+export default function Create({ data, setData, setIsUsersPost }) {
   useEffect(() => {
     let mounted = true;
     getData().then((items) => {
@@ -18,24 +18,30 @@ export default function Create({data, setData}) {
         setData(items);
       }
     });
+    setIsUsersPost(false);
     return () => (mounted = false);
   }, []);
 
   return (
     <>
-    <h1>Welcome!</h1>
-      <h4>See below for our list of blog posts</h4>
-    <Grid container spacing={4} justifyContent="center">
-      {data.map((post, index) => {
-        return (
-          <Grid item>
-            <NavLink to={`/${index}`} style  = {{textDecoration: 'none'}}>
-              <Post post={post} />
-            </NavLink>
-          </Grid>
-        );
-      })}
-    </Grid>
+      <Grid container justifyContent="center">
+        <div className="greeting">
+          <h1>Welcome!</h1>
+          <h4>See below for all of our exciting blog posts!</h4>
+        </div>
+        {data.map((post, index) => {
+          return (
+            <Grid item xs={12} style={{ margin: 50 }}>
+              <NavLink
+                to={`/${post.post_id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Post post={post} />
+              </NavLink>
+            </Grid>
+          );
+        })}
+      </Grid>
     </>
   );
 }

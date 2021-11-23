@@ -41,7 +41,7 @@ export default function Create(userId) {
       .post(`http://localhost:3001/create`, {
         title,
         body,
-        userId
+        userId,
       })
       .then(function (response) {
         setIsSubmitted(true);
@@ -54,41 +54,45 @@ export default function Create(userId) {
   };
   return (
     <>
-      <Card variant="outlined">
-        <CardContent>
-          <Grid container spacing={4}>
-            <Grid item sx={12}>
-              <Typography>Write a good story!</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="outlined-textarea"
-                label="Title"
-                placeholder="Title"
-                onChange={handleTitleChange}
-                value={title}
-                multiline
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="outlined-textarea"
-                label="Body"
-                placeholder="Write your story!"
-                onChange={handleBodyChange}
-                value={body}
-                multiline
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button variant="contained" onClick={handleSubmit}>
-                Submit
-              </Button>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+      <Grid container justifyContent="center">
+        <Grid item style={{ margin: 100 }}>
+          <Card variant="outlined">
+            <CardContent>
+              <Grid container spacing={4}>
+                <Grid item sx={12}>
+                  <Typography>Write a good story!</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-textarea"
+                    label="Title"
+                    placeholder="Title"
+                    onChange={handleTitleChange}
+                    value={title}
+                    multiline
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="outlined-textarea"
+                    label="Body"
+                    placeholder="Write your story!"
+                    onChange={handleBodyChange}
+                    value={body}
+                    multiline
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="contained" onClick={handleSubmit}>
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Snackbar
           open={isSubmitted}
