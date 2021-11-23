@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import "./App.css";
 import Login from "./components/Login";
 import RequireAuth from "./components/RequireAuth";
 import Public from "./components/Public";
 import Create from "./components/Create";
 import PostFull from "./components/PostFull.js";
+import MyPosts from "./components/MyPosts.js";
 import { Routes, Route, NavLink } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -34,11 +35,15 @@ function App() {
     setPassword(event.target.value);
   };
 
+  const logout = () => {
+    setIsAuthenticated(false);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (password.length === 0 || username.length === 0){
-      setZeroEntry(true)
-      return
+    if (password.length === 0 || username.length === 0) {
+      setZeroEntry(true);
+      return;
     }
     let endpoint = "";
     if (checked) {
@@ -77,68 +82,89 @@ function App() {
           <Button>Home</Button>
         </NavLink>
         <NavLink to="/login" className="App-link">
-          <Button>Login</Button>
+          {isAuthenticated ? (
+            <Button onClick={logout} className="App-link">
+              Logout
+            </Button>
+          ) : (
+            <Button>Login</Button>
+          )}
         </NavLink>
         <NavLink to="/create" className="App-link">
           <Button>Create</Button>
         </NavLink>
+        <NavLink to="/myposts" className="App-link">
+          <Button>My Posts</Button>
+        </NavLink>
       </div>
       <div className="App">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Public
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Public
+                data={data}
+                setData={setData}
+                setIsUsersPost={setIsUsersPost}
+              />
+            }
+          />
+          <Route
+            path="/:postId"
+            element={
+              <PostFull
+                data={data}
+                userId={userId}
+                isUsersPost={isUsersPost}
+                setIsUsersPost={setIsUsersPost}
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Login
+                isAuthenticated={isAuthenticated}
+                checked={checked}
+                username={username}
+                password={password}
+                handleUserChange={handleUserChange}
+                handlePassChange={handlePassChange}
+                handleSwitchChange={handleSwitchChange}
+                handleSubmit={handleSubmit}
+                isLoginError={isLoginError}
+                setIsLoginError={setIsLoginError}
+                isSignupError={isSignupError}
+                setIsSignupError={setIsSignupError}
+                isSignupSuccess={isSignupSuccess}
+                setIsSignupSuccess={setIsSignupSuccess}
+                zeroEntry={zeroEntry}
+                setZeroEntry={setZeroEntry}
+              />
+            }
+          />
+          <Route
+            path="/create"
+            element={
+              <RequireAuth isAuthenticated={isAuthenticated}>
+                <Create userId={userId} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/myposts"
+            element={
+              <RequireAuth isAuthenticated={isAuthenticated}>
+                <MyPosts
+                  userId={userId}
                   data={data}
                   setData={setData}
-                  setIsUsersPost={setIsUsersPost}
                 />
-              }
-            />
-            <Route
-              path="/:postId"
-              element={
-                <PostFull
-                  data={data}
-                  userId={userId}
-                  isUsersPost={isUsersPost}
-                  setIsUsersPost={setIsUsersPost}
-                  isAuthenticated={isAuthenticated}
-                />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <Login
-                  isAuthenticated={isAuthenticated}
-                  checked={checked}
-                  username={username}
-                  password={password}
-                  handleUserChange={handleUserChange}
-                  handlePassChange={handlePassChange}
-                  handleSwitchChange={handleSwitchChange}
-                  handleSubmit={handleSubmit}
-                  isLoginError={isLoginError}
-                  setIsLoginError={setIsLoginError}
-                  isSignupError={isSignupError}
-                  setIsSignupError={setIsSignupError}
-                  isSignupSuccess={isSignupSuccess}
-                  setIsSignupSuccess={setIsSignupSuccess}
-                  zeroEntry = {zeroEntry}
-                  setZeroEntry = {setZeroEntry}
-                />
-              }
-            />
-            <Route
-              path="/create"
-              element={
-                <RequireAuth isAuthenticated={isAuthenticated}>
-                  <Create userId={userId} />
-                </RequireAuth>
-              }
-            />
-          </Routes>
+              </RequireAuth>
+            }
+          />
+        </Routes>
       </div>
     </>
   );

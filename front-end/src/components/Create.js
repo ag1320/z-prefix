@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { NavLink } from 'react-router-dom'
 import {
   TextField,
   Button,
@@ -84,9 +85,11 @@ export default function Create(userId) {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button variant="contained" onClick={handleSubmit}>
-                    Submit
-                  </Button>
+                  <NavLink to ='/myposts'>
+                    <Button variant="contained" onClick={handleSubmit}>
+                      Submit
+                    </Button>
+                  </NavLink>
                 </Grid>
               </Grid>
             </CardContent>

@@ -1,34 +1,34 @@
-import { useEffect } from "react";
 import axios from "axios";
-import Post from "../components/Post.js";
-import { Grid } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import "./Public.css";
+import { useEffect } from "react";
+import './MyPosts.css'
+import { Grid } from '@mui/material'
+import { NavLink } from 'react-router-dom'
+import Post from './Post.js'
 
-async function getData() {
-  let res = await axios.get("http://localhost:3001/posts");
+async function getData(userId) {
+  let res = await axios.post("http://localhost:3001/getUsersPosts", { userId });
   return res.data;
 }
 
-export default function Create({ data, setData, setIsUsersPost }) {
+export default function MyPosts({ userId, data, setData }) {
   useEffect(() => {
     let mounted = true;
-    getData().then((items) => {
-      if (mounted) {
-        setData(items);
-      }
-    }).catch(
-      setData([])
-    );
-    setIsUsersPost(false);
+    getData(userId)
+      .then((items) => {
+        if (mounted) {
+          setData(items);
+        }
+      })
+      .catch(setData([]));
     return () => (mounted = false);
   }, []);
+
   return (
     <>
       <Grid container justifyContent="center">
         <div className="greeting">
-          <h1>Welcome</h1>
-          <h4>See below for all of our exciting blog posts!</h4>
+          <h1>Welcome!</h1>
+          <h4>Here are the posts you've written!</h4>
         </div>
         {data.map((post, index) => {
           return (

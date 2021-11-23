@@ -33,7 +33,6 @@ function createPost(title, body, userId) {
 
 function getUserPosts(userId) {
  let user_id = userId
- console.log(user_id)
   return knex("posts")
     .select('*')
     .where({ user_id })
