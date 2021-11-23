@@ -18,6 +18,7 @@ function App() {
   let [isSignupError, setIsSignupError] = useState(false);
   let [isSignupSuccess, setIsSignupSuccess] = useState(false);
   let [data, setData] = useState([]);
+  let [userId, setUserId] = useState(0);
 
   const handleSwitchChange = (event) => {
     setChecked(event.target.checked);
@@ -47,6 +48,7 @@ function App() {
       .then(function (response) {
         if (endpoint === "login") {
           setIsAuthenticated(true);
+          setUserId(response.data.user_id)
         } else {
           setIsSignupSuccess(true);
         }
@@ -105,7 +107,7 @@ function App() {
               path="/create"
               element={
                 <RequireAuth isAuthenticated={isAuthenticated}>
-                  <Create />
+                  <Create userId = {userId}/>
                 </RequireAuth>
               }
             />

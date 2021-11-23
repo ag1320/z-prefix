@@ -7,7 +7,7 @@ export default function Post({ post }) {
       <CardHeader title = {post.title}/>
       <CardContent>
         <Typography>
-            {post.body.length<100?post.body:(post.body.substring(0,99)+'...')}
+            {post.body?.length<100?post.body:(post.body?.substring(0,99)+'...')}
         </Typography>
       </CardContent>
     </Card>

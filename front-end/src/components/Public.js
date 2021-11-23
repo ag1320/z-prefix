@@ -22,6 +22,9 @@ export default function Create({data, setData}) {
   }, []);
 
   return (
+    <>
+    <h1>Welcome!</h1>
+      <h4>See below for our list of blog posts</h4>
     <Grid container spacing={4} justifyContent="center">
       {data.map((post, index) => {
         return (
@@ -33,5 +36,6 @@ export default function Create({data, setData}) {
         );
       })}
     </Grid>
+    </>
   );
 }

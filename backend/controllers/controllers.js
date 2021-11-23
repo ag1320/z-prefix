@@ -8,10 +8,10 @@ function insertUser(username, passHash) {
 
 function getPassword(username) {
   return knex("users")
-    .select("password")
+    .select("password", "user_id")
     .where({ username })
     .then((data) => {
-      return data[0].password;
+      return data[0];
     })
     .catch((err) => err);
 }
@@ -23,4 +23,12 @@ function getPosts() {
     .catch((err) => err);
 }
 
-module.exports = { insertUser, getPassword, getPosts };
+function createPost(title, body, userId) {
+  let {user_id} = userId
+  return knex("posts")
+    .insert({ title, body, user_id })
+    .then((data) => data)
+    .catch((err) => err);
+}
+
+module.exports = { insertUser, getPassword, getPosts, createPost };
