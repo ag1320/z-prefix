@@ -91,7 +91,4 @@ app.patch("/patch", (req, res) => {
     .catch((err) => res.status(500).json(err));
 });
 
-const port = 3001;
-app.listen(port, () =>
-  console.log(`Backend listening at http://localhost:${port}`)
-);
+module.exports = app;

@@ -24,6 +24,7 @@ function getPosts() {
 }
 
 function createPost(title, body, userId) {
+  console.log(title, body, userId )
   let user_id = userId.userId
   return knex("posts")
     .insert({ title, body, user_id })

@@ -14,7 +14,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "knex migrate:latest && knex seed:run --specific=deletes.js && knex seed:run --specific=initial_users.js && knex seed:run --specific=initial_posts.js && node app.js"
   },
   "author": "",
   "license": "ISC"

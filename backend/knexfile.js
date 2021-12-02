@@ -1,42 +1,28 @@
 // Update with your config settings.
+require('dotenv').config()
+
+const connection = {
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+}
 
 module.exports = {
 
   development: {
     client: 'pg',
-    connection: 'postgres://postgres:docker@localhost/z'
+    connection: process.env.DATABASE_URL || 'postgres://postgres:docker@localhost/zpre'
   },
 
   staging: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+    client: 'pg',
+    connection
   },
 
   production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+    client: 'pg',
+    connection
   }
 
 };
